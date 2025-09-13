@@ -1,0 +1,39 @@
+syntax = "proto3";
+package Protocol;
+
+
+
+// ===== 연결/세션 관련 =====
+enum ConnectStatus {
+    CONNECT_OK = 0;
+    CONNECT_FAIL = 1;
+    CONNECT_RECONNECT = 2;
+}
+
+// ===== 채팅 룸 관련 =====
+enum RoomType {
+    ROOM_PRIVATE = 0;   // 1:1
+    ROOM_GROUP   = 1;   // 단체방
+    ROOM_GUILD   = 2;   // 길드/운영 확장
+}
+
+// ===== Presence 상태 =====
+enum PresenceStatus {
+    OFFLINE = 0;
+    ONLINE = 1;
+    IN_GAME = 2;
+    AWAY = 3;
+}
+
+// ===== 친구 요청 상태 =====
+enum FriendStatus {
+    PENDING = 0;
+    ACCEPTED = 1;
+    BLOCKED = 2;
+}
+
+// ===== 관리자 명령 결과 =====
+enum AdminActionResult {
+    ACTION_OK = 0;
+    ACTION_FAIL = 1;
+}

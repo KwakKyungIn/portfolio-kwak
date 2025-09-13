@@ -1,0 +1,18 @@
+# Visual Studio
+.vs/
+*.vcxproj.user
+*.suo
+*.db
+*.ipch
+*.pch
+*.pdb
+*.obj
+*.lib
+*.tlog
+*.log
+Debug/
+Release/
+x64/
+Binary/
+Libraries/Libs/Protobuf/Debug/
+Libraries/Libs/Protobuf/Release/

@@ -1,0 +1,40 @@
+syntax = "proto3";
+package Protocol;
+import "Enum.proto";
+
+// ===== 플레이어 =====
+message PlayerInfo {
+    int64 playerId = 1;
+    string name = 2;
+    PresenceStatus presence = 3;
+}
+
+// ===== 채팅 메시지 =====
+message ChatMessage {
+    int64 messageId = 1;    // 서버가 부여하는 시퀀스
+    int64 senderId = 2;
+    string message = 3;
+    int64 timestamp = 4;
+}
+
+// ===== 채팅 방 =====
+message RoomInfo {
+    int64 roomId = 1;
+    RoomType type = 2;
+    string roomName = 3;
+    repeated PlayerInfo members = 4;
+}
+
+// ===== 친구 =====
+message FriendInfo {
+    int64 friendId = 1;
+    string name = 2;
+    FriendStatus status = 3;
+    PresenceStatus presence = 4;
+}
+
+// ===== Reconnect =====
+message PendingMessage {
+    int64 messageId = 1;
+    ChatMessage chat = 2;
+}

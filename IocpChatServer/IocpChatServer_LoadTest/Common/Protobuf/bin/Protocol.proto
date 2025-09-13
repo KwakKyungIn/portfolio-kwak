@@ -1,0 +1,82 @@
+syntax = "proto3";
+package Protocol;
+import "Struct.proto";
+import "Enum.proto";
+
+// ===== 로그인 / 연결 =====
+message C_LOGIN_REQ {
+    string name = 1;
+}
+message S_LOGIN_RES {
+    int64 playerId = 1;
+    ConnectStatus status = 2;
+    string reason = 3;
+}
+
+
+
+// ===== 채팅 룸 =====
+message C_CREATE_ROOM_REQ {
+    string roomName = 1;
+    RoomType type = 2;
+}
+message S_CREATE_ROOM_RES {
+    bool success = 1;
+    RoomInfo room = 2;
+    string reason = 3;
+}
+
+message C_JOIN_ROOM_REQ {
+    int64 roomId = 1;
+}
+message S_JOIN_ROOM_RES {
+    bool success = 1;
+    RoomInfo room = 2;
+    string reason = 3;
+}
+message S_JOIN_ROOM_NTF {
+    int64 playerId = 1;
+    string name = 2;
+}
+
+message C_ROOM_CHAT_REQ {
+    int64 roomId = 1;
+    string message = 2;
+}
+message S_ROOM_CHAT_NTF {
+    int64 roomId = 1;
+    ChatMessage chat = 2;
+}
+
+message C_LEAVE_ROOM_REQ {
+    int32 roomId = 1; // 클라가 나가려는 방 ID
+}
+
+message S_LEAVE_ROOM_ACK {
+    int32 roomId = 1;    // 나간 방 ID
+    bool success = 2;    // 성공 여부
+}
+
+
+
+// ===== Presence =====
+message S_PRESENCE_NTF {
+    int64 playerId = 1;
+    PresenceStatus status = 2;
+}
+
+// ===== Flooding 방지 =====
+message S_RATE_LIMIT_NTF {
+    int64 playerId = 1;
+    int32 cooldownSec = 2;
+    string reason = 3;
+}
+
+// ===== 운영자 명령어 =====
+message C_ADMIN_COMMAND_REQ {
+    string command = 1;   // "/kick 123", "/mute 456", "/announce Hello"
+}
+message S_ADMIN_COMMAND_RES {
+    AdminActionResult result = 1;
+    string output = 2;    // 실행 결과 메시지
+}
