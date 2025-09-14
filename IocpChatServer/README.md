@@ -63,6 +63,8 @@ Windows IOCP 기반의 초저지연 채팅 서버입니다.
 👉 [부하테스트 시연 영상](./assets/LoadTest.mp4)  
 <video src="./assets/LoadTest.mp4" controls width="600"></video>
 
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=icBcWGfrE24&list=RDicBcWGfrE24&start_radio=1" frameborder="0" allowfullscreen></iframe>
+
 ---
 
 ## 💻 대표 코드 스니펫
