@@ -19,7 +19,8 @@ Windows IOCP 기반의 초저지연 채팅 서버입니다.
   - (락 내부 = 큐 비우기, 락 외부 = WSABUF 구성)  
 - `SendBuffer`(thread_local 청크), MemoryPool/ObjectPool(사이즈 클래스)  
 - Room / RoomManager / Player 도메인, READ 스냅샷 기반 브로드캐스트  
-- 로그인 · 방 생성 · 입장 · 채팅 · 나가기 전체 플로우 지원  
+- 로그인 · 방 생성 · 입장 · 채팅 · 나가기 전체 플로우 지원
+- Protobuf 기반 패킷 정의 및 Python 스크립트 자동화 (핸들러 헤더 생성)
 - DBConnectionPool(ODBC) 기반 인증/로그 기록  
 - Room JobQueue를 통한 파일/DB 로그 비동기화  
 - DummyClient를 활용한 동시 접속 · RPS · 메시지 페이로드 부하 시뮬레이션  
@@ -30,7 +31,9 @@ Windows IOCP 기반의 초저지연 채팅 서버입니다.
 중앙의 **Session I/O Core** → 패킷 파싱 → `ClientPacketHandler` 라우팅 → `Room/RoomManager` 상태 변경 → 응답/브로드캐스트는 `Session::Send()`로 SG-WSASend 배치.  
 
 - 브로드캐스트: **READ-락 스냅샷 후 해제 → 즉시 전송**  
-- 로그/DB: **Room JobQueue**에서 비동기 처리  
+- 로그/DB: **Room JobQueue**에서 비동기 처리
+  
+👉 아래 컴포넌트 다이어그램은 위 구조를 시각화한 것으로, 주요 모듈 간 관계와 데이터 흐름을 한눈에 확인할 수 있습니다.  
 <br>
 
 📊 다이어그램: <br><br>
