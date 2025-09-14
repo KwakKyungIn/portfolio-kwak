@@ -31,8 +31,9 @@ Windows IOCP 기반의 초저지연 채팅 서버입니다.
 
 - 브로드캐스트: **READ-락 스냅샷 후 해제 → 즉시 전송**  
 - 로그/DB: **Room JobQueue**에서 비동기 처리  
-
-📊 다이어그램: [`docs/iocpchatserver_core_centric.png`](./docs/iocpchatserver_core_centric.png)  
+<br>
+📊 다이어그램: <br><br>
+![`assets/component.svg`](./assets/component.svg)  
 
 ---
 
@@ -55,8 +56,12 @@ Windows IOCP 기반의 초저지연 채팅 서버입니다.
 ---
 
 ## 🎥 시연 영상
-👉 [시연 영상](https://…/iocpchatserver-demo.mp4)  
+👉 [시연 영상](./assets/test.mp4)  
+<video src="./assets/test.mp4" controls width="600"></video>
 - 시나리오: 로그인 → 방 생성 → 채팅 → 나가기  
+
+👉 [부하테스트 시연 영상](./assets/LoadTest.mp4)  
+<video src="./assets/LoadTest.mp4" controls width="600"></video>
 
 ---
 
