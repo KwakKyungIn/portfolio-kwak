@@ -1,5 +1,5 @@
 # Kwak Portfolio
-<img src="assets/avatar.png" width="128" align="left" alt="Kwak Kyung-In" />
+<img src="assets/kwakkyungin.jpg" width="128" align="left" alt="Kwak Kyung-In" />
 
 &emsp;&emsp;***🎓 명지대학교 정보통신공학과 · 4학년 2학기 재학***<br>
 &emsp;&emsp;***💻 희망 포지션: 게임 서버 프로그래머***<br>
