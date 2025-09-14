@@ -56,8 +56,8 @@ Windows IOCP 기반의 초저지연 채팅 서버입니다.
 ---
 
 ## 🎥 시연 영상
-👉 [시연 영상](./assets/test.mp4)  
-<video src="./assets/test.mp4" controls width="600"></video>
+👉 [시연 영상](./assets/Test.mp4)  
+<video src="./assets/Test.mp4" controls width="600"></video>
 - 시나리오: 로그인 → 방 생성 → 채팅 → 나가기  
 
 👉 [부하테스트 시연 영상](./assets/LoadTest.mp4)  
