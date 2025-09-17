@@ -36,7 +36,7 @@
 > - **UX 디테일**: 하이라이트, 자동 아이템 흡수, 툴바 휠 전환, 드래그&드랍 인벤토리  
 > - **씬 전환 안정화**: Additive Scene + Cinemachine OnTargetObjectWarped 활용  
 >
-> ### 🔗 [프로젝트 링크](./Unity2DFarmRPG)
+> ### 🔗 [프로젝트 링크](./CapstoneDesign1_Unity2DFarmRPG)
 ---
 
 > ## 🔸 CapstoneDesign project - Lakrmir : Unity 2D Multiplayer Action Prototype
