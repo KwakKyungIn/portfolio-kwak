@@ -37,7 +37,7 @@ Windows IOCP 기반의 초저지연 채팅 서버입니다.
 <br>
 
 📊 다이어그램: <br><br>
-![`assets/component.svg`](./assets/component.svg)  
+![`assets/component.svg`](./assets/IocpChatServer_Component.svg)  
 
 ---
 ## 📂 프로젝트 구조
