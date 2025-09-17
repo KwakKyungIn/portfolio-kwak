@@ -27,7 +27,7 @@
 > - 평균 지연 시간: **~0.4ms (p50 0.34ms, p99 2ms)**  
 > ### 🔗 [프로젝트 링크](./IocpChatServer)
 ---
-> ## 🔸 Unity 2D Farm RPG
+> ## 🔸 CapstoneDesign project : Unity 2D Farm RPG
 > 타일 기반 **농사·채집·대화 프로토타입**.<br>
 > ScriptableObject 기반 데이터 주도 설계로, 인벤토리·툴바·시간 시스템까지 연결된 **완전한 플레이 루프**를 구현했습니다.  
 > ### 🎮 Gameplay Highlight
@@ -37,6 +37,22 @@
 > - **씬 전환 안정화**: Additive Scene + Cinemachine OnTargetObjectWarped 활용  
 >
 > ### 🔗 [프로젝트 링크](./Unity2DFarmRPG)
+---
+
+> ## 🔸 CapstoneDesign project - Lakrmir : Unity 2D Multiplayer Action Prototype
+>
+> Photon PUN2 기반 **멀티플레이 액션 프로토타입**.<br>
+> 로비/방 생성·참여·Ready → 멀티 씬 진입 → **플레이어 이동·점프·대쉬·공격 동기화**와 **마스터 클라이언트 몬스터/보스 제어**까지 이어지는 멀티플레이 루프를 구현했습니다.
+>
+> ### 🎮 Multiplayer Highlight
+>
+> * **멀티 시작 플로우**: 닉네임 입력 → 모드 선택 → 방 생성·참여 → Ready 동기화 → 씬 진입
+> * **플레이어 네트워크 동기화**: 이동/점프/대쉬/근·원거리/실드 공격을 SerializeView + RPC로 처리, 보간(LERP) 적용
+> * **권한 모델 설계**: 플레이어는 Owner 입력 주도, 몬스터/보스는 MasterClient 단일 권한으로 AI·패턴·투사체 관리
+> * **투사체 복제 전략**: 플레이어 화살 = 로컬 발사 + RPC 복제(반응성), 몬스터 화살 = 네트워크 Instantiate(일관성)
+> * **UI & UX 연결**: MainMenu/MultiSelect에서 로비 UI → PhotonNetwork 씬 전환까지 자연스럽게 연동
+>
+> ### 🔗 [프로젝트 링크](./CapstoneDesign2_Lakemir)
 
 
 ---
