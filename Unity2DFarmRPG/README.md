@@ -1,6 +1,6 @@
 # 📌 개요 (Overview)
 
-**프로젝트명**: Unity 2D Farm RPG (농사·채집·대화 프로토타입)
+**프로젝트명**: Unity 2D Farm RPG (농사·채집·대화 프로토타입)<br>
 **한 줄 소개**: “**타일 기반 농사 + 자원 채집 + 대화 시스템**을 데이터 주도 설계(ScriptableObject)로 모듈화하고, **툴바/인벤토리/타임 시스템**으로 플레이 루프를 완성한 2D 탑다운 RPG.”
 
 ## 🎯 설계 목표
@@ -245,8 +245,8 @@
 아래 컴포넌트 다이어그램은 주요 시스템 간의 관계와 데이터/이벤트 흐름을 한눈에 보여준다.
 
 📊 다이어그램:
-![Unity2D\_FarmRPG\_Component](./assets/Unity2D_FarmRPG_Component.png)
-![Unity2D\_FarmRPG\_Component](./assets/Unity2D_FarmRPG_Architecture.png)
+![Unity2D\_FarmRPG\_Component](./assets/Unity2D_FarmRPG_Component.svg)
+![Unity2D\_FarmRPG\_Component](./assets/Unity2D_FarmRPG_Architecture.svg)
 ---
 
 ### 🎮 플레이어 루프
