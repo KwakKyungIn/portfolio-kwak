@@ -4,8 +4,8 @@
 아래 컴포넌트 다이어그램은 주요 시스템 간의 관계와 데이터/이벤트 흐름을 한눈에 보여준다.
 
 📊 다이어그램:
-![Unity2D\_FarmRPG\_Component](./assets/Unity2D_FarmRPG_Component.svg)
-![Unity2D\_FarmRPG\_Component](./assets/Unity2D_FarmRPG_Architecture.svg)
+![Unity2D\_FarmRPG\_Component](../assets/Unity2D_FarmRPG_Component.svg)
+![Unity2D\_FarmRPG\_Component](../assets/Unity2D_FarmRPG_Architecture.svg)
 ---
 
 ### 🎮 플레이어 루프
