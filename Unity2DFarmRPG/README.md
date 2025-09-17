@@ -1,11 +1,3 @@
-**Read more**
-- [Features](./docs/features.md)
-- [Architecture](./docs/architecture.md)
-- [Code Snippets](./docs/code-snippets.md)
-- [Screenshots](./docs/demo.md)
-
----
-
 # 📌 개요 (Overview)
 
 **프로젝트명**: Unity 2D Farm RPG (농사·채집·대화 프로토타입)<br>  
