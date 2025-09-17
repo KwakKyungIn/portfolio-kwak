@@ -4,14 +4,19 @@
 - [Code Snippets](./docs/code-snippets.md)
 - [Screenshots](./docs/demo.md)
 
-![Component Diagram](./assets/Unity2D_FarmRPG_Component.svg)
-
 ---
 
 # 📌 개요 (Overview)
 
 **프로젝트명**: Unity 2D Farm RPG (농사·채집·대화 프로토타입)<br>  
 **한 줄 소개**: “**타일 기반 농사 + 자원 채집 + 대화 시스템**을 데이터 주도 설계(ScriptableObject)로 모듈화하고, **툴바/인벤토리/타임 시스템**으로 플레이 루프를 완성한 2D 탑다운 RPG.”
+
+**Read more**
+- [Features](./docs/features.md)
+- [Architecture](./docs/architecture.md)
+- [Code Snippets](./docs/code-snippets.md)
+- [Screenshots](./docs/demo.md)
+
 
 ## 🎯 설계 목표
 
@@ -42,6 +47,8 @@
   * 공통 소비 훅: `OnItemUsed(item, inventory)`로 **내구도/소모품/쿨다운** 같은 규칙 확장 용이
 * **타일 기반 상호작용**: `TileMapReadController`가 스크린/월드 좌표→**타일 좌표** 변환, `MarkerManager`가 선택 타일 하이라이트
 * **UX 디테일**: 휠 스크롤로 툴바 인덱스 순환, `HighlightController`로 상호작용 타겟 시각화, `PickUpItem` **자기 유도** + TTL 관리
+
+![Component Diagram](./assets/Unity2D_FarmRPG_Component.svg)
 
 ## 🔮 향후 개선 방향
 
