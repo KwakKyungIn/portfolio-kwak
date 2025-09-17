@@ -24,7 +24,7 @@ private void Tick()
         }
     }
 }
-```
+````
 
 ✔ `TimeAgent`의 tick 이벤트마다 호출 → 작물 성장 단계 진행.
 
