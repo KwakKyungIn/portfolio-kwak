@@ -3,12 +3,6 @@
 프로젝트명: Unity 2D Farm RPG (농사·채집·대화 프로토타입)<br>  
 한 줄 소개: “타일 기반 농사 + 자원 채집 + 대화 시스템을 데이터 주도 설계(ScriptableObject)로 모듈화하고, 툴바/인벤토리/타임 시스템으로 플레이 루프를 완성한 2D 탑다운 RPG입니다.”
 
-Read more
-- [Features](./docs/features.md)
-- [Architecture](./docs/architecture.md)
-- [Code Snippets](./docs/code-snippets.md)
-- [Screenshots](./docs/demo.md)
-
 
 ## 🎯 설계 목표
 
@@ -48,6 +42,10 @@ Read more
 * 데이터 주도 설계: ScriptableObject 기반 DB를 확장해 더 많은 아이템/작물/NPC 관리
 * 세이브/로드 시스템: 플레이어 상태, 인벤토리, 월드 시간 저장/복원
 * UI 고도화: 인벤토리 정렬, 아이템 툴팁, 대화 분기 시스템
-```
 
 ---
+Read more
+- [Features](./docs/features.md)
+- [Architecture](./docs/architecture.md)
+- [Code Snippets](./docs/code-snippets.md)
+- [Screenshots](./docs/demo.md)
