@@ -25,7 +25,7 @@
 > - 500 Clients · 10 Rooms 환경에서 안정적 처리 검증  
 > - Broadcast 처리량: **초당 약 25만 메시지**  
 > - 평균 지연 시간: **~0.4ms (p50 0.34ms, p99 2ms)**  
-> ### 🔗 [프로젝트 링크](./IocpChatServer)
+> ### 🔗 [프로젝트 링크](./IocpChatServer/README.md)
 ---
 > ## 🔸 CapstoneDesign project : Unity 2D Farm RPG
 > 타일 기반 **농사·채집·대화 프로토타입**.<br>
@@ -36,7 +36,7 @@
 > - **UX 디테일**: 하이라이트, 자동 아이템 흡수, 툴바 휠 전환, 드래그&드랍 인벤토리  
 > - **씬 전환 안정화**: Additive Scene + Cinemachine OnTargetObjectWarped 활용  
 >
-> ### 🔗 [프로젝트 링크](./CapstoneDesign1_Unity2DFarmRPG)
+> ### 🔗 [프로젝트 링크](./CapstoneDesign1_Unity2DFarmRPG/README.md)
 ---
 
 > ## 🔸 CapstoneDesign project - Lakrmir : Unity 2D Multiplayer Action Prototype
@@ -52,7 +52,7 @@
 > * **투사체 복제 전략**: 플레이어 화살 = 로컬 발사 + RPC 복제(반응성), 몬스터 화살 = 네트워크 Instantiate(일관성)
 > * **UI & UX 연결**: MainMenu/MultiSelect에서 로비 UI → PhotonNetwork 씬 전환까지 자연스럽게 연동
 >
-> ### 🔗 [프로젝트 링크](./CapstoneDesign2_Lakemir)
+> ### 🔗 [프로젝트 링크](./CapstoneDesign2_Lakemir/README.md)
 
 
 ---
