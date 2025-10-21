@@ -44,8 +44,4 @@
 * UI 고도화: 인벤토리 정렬, 아이템 툴팁, 대화 분기 시스템
 
 ---
-Read more
-- [Features](./docs/features.md)
-- [Architecture](./docs/architecture.md)
-- [Code Snippets](./docs/code-snippets.md)
-- [Screenshots](./docs/demo.md)
+
