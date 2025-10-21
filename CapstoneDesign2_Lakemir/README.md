@@ -166,12 +166,6 @@ photonView.RPC("SyncArrowCreation", RpcTarget.Others,
 
 ---
 
-## 🎥 시연 영상
-
-* [게임 플레이 데모](https://youtu.be/LaYTojuuVZ0) – 로비 → 방 입장 → Ready → 멀티 전투
-* [부하/동기화 데모](https://youtu.be/05-56TYfodA) – 투사체 및 애니메이션 싱크 관찰
-
----
 
 ## 🔮 향후 개선
 
