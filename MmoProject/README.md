@@ -2,7 +2,7 @@
 
 ## 📌 개요
 
-이 프로젝트는 `LoginServer`, `GameServer`, `DBAgent`, `Unity Client`를 분리해 구성한 **C++ IOCP 기반 MMORPG 서버 프로젝트**입니다.
+이 프로젝트는 제가 개인적으로 설계하고 구현한 `LoginServer`, `GameServer`, `DBAgent`, `Unity Client` 분리 구조의 **C++ IOCP 기반 MMORPG 서버 프로젝트**입니다.
 단순히 기능을 붙이는 수준이 아니라, 로그인부터 월드 입장, 이동·전투, 파티·던전·거래, 저장과 종료까지 이어지는 핵심 플레이 흐름을 **서버 권위, 정합성, 관측 가능성** 관점에서 직접 설계하고 구현했습니다.
 
 이번 작업에서 특히 중요하게 가져간 기준은 "기능이 동작하는가"보다 **동시 입력, 비동기 DB 응답, 저장 지연, 예외 상황에서도 상태가 일관되게 수렴하는가**였습니다. 그래서 프로젝트 전반을 다음 네 가지 축으로 정리했습니다.
@@ -34,12 +34,56 @@
 * `LobbyRoom`이 `stat`, `items`, `quickslot` 3종 로딩 상태를 별도로 추적하고, **셋이 모두 준비된 경우에만** 실제 월드 입장을 확정합니다.
 * 로딩 실패나 잘못된 진입은 `S_ENTER_GAME(false)`와 세션 정리 경로로 수렴시켜, 반쯤 로딩된 상태가 월드에 들어가지 않도록 설계했습니다.
 
+**시각 요약**
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant LS as LoginServer
+    participant R as Redis
+    participant GS as GameServer
+    participant LB as LobbyRoom
+    participant DB as DBAgent
+    participant GR as GameRoom
+
+    C->>LS: C_LOGIN
+    LS->>DB: S2S_REQ_LOGIN
+    DB-->>LS: account lookup result
+    LS->>R: token store (TTL)
+    LS-->>C: S_LOGIN(token)
+    C->>GS: C_ENTER_GAME(token)
+    GS->>R: token validate
+    GS->>LB: EnterGame + PendingEnter
+    GS->>DB: load stat / items / quickslot
+    DB-->>LB: S2S_RES_*
+    LB->>GR: TryEnterWorldIfReady
+    GR-->>C: S_ENTER_GAME + AOI snapshot
+```
+
 ### 2) 월드/채널/인스턴스/맵 변경 핸드셰이크
 
 * `RoomKey(channelId, mapId, instanceId)` 기준으로 월드 룸과 인스턴스 룸을 관리합니다.
 * 채널별 `LobbyRoom`, 일반 월드용 `GameRoom`, 파티 전용 `Instance`를 분리해 구조를 단순화했습니다.
 * 맵 변경은 토큰 발급 → `MapChanging` 상태 전이 → ACK 검증 → 룸 이동 순서로 처리해 중복 전이와 잘못된 ACK를 막았습니다.
 * 던전 입장은 `PartyActor`와 `InstanceActor`를 통해 파티 단위로 전개하고, 강퇴·해산·인스턴스 종료 시에도 안전 귀환 경로로 수렴시켰습니다.
+
+**시각 요약**
+
+```mermaid
+flowchart LR
+    A[C_MAP_CHANGE_REQ] --> B[MapChangeToken 발급]
+    B --> C[Session: MapChanging]
+    C --> D[S_MAP_CHANGE_BEGIN]
+    D --> E[C_MAP_CHANGE_ACK]
+    E --> F[TransferMapChangeById]
+    F --> G[LobbyRoom 임시 소유]
+    G --> H[New GameRoom EnterMapChange]
+    H --> I[S_MAP_CHANGE_END]
+
+    J[C_DUNGEON_ENTER_REQ] --> K[PartyActor 상태 검증]
+    K --> L[InstanceActor CreateOrGetForParty]
+    L --> D
+```
 
 ### 3) 서버 권위 이동 검증 + AOI/SpatialGrid
 
@@ -48,12 +92,44 @@
 * 최종적으로 `ValidateMove`를 통과한 좌표만 서버 권위 위치로 커밋하고, 그 결과만 `S_MOVE`로 전파합니다.
 * 시야 동기화는 `SpatialGrid`와 connectivity 필터를 이용해 가시 대상을 계산하고, `S_SPAWN`/`S_DESPAWN`을 배치와 스냅샷 경계로 나눠 전송합니다.
 
+**시각 요약**
+
+```mermaid
+flowchart LR
+    A[C_MOVE] --> B[RoomActor Queue]
+    B --> C[Seq / Time Validate]
+    C --> D[Speed Clamp]
+    D --> E[NavMesh ValidateMove]
+    E -->|fail| F[Drop / No Commit]
+    E -->|pass| G[Authoritative Position Commit]
+    G --> H[Zone / AOI Update]
+    H --> I[S_MOVE to Visible Players]
+    H --> J[S_SPAWN / S_DESPAWN Batch]
+```
+
 ### 4) 전투/투사체/몬스터 AI/드랍
 
 * 즉발, 원형, 부채꼴, 투사체 스킬을 서버가 직접 판정하고, 쿨타임도 서버 기준으로 검증합니다.
 * 투사체는 속도, 수명, 사거리, 히트 반경, 관통 여부를 런타임 상태로 관리하고, 벽 충돌과 피격 처리도 서버에서 확정합니다.
 * 몬스터는 `Idle`, `Chase`, `Attack`, `Return` 상태를 가진 FSM으로 동작하며, NavMesh 경로 추적과 LOS 기반 추격 최적화를 적용했습니다.
 * `MonsterTemplates`, `SpawnTables`, `DropTables`를 로드해 몬스터 스폰, 리젠, 드랍 그룹 롤링까지 이어지는 전투 루프를 구성했습니다.
+
+**시각 요약**
+
+```mermaid
+flowchart LR
+    A[C_SKILL] --> B[BattleSystem ResolveSkill]
+    B --> C{Skill Type}
+    C --> D[Direct / Circle / Cone]
+    C --> E[Projectile Spawn]
+    E --> F[Tick Update + Raycast]
+    D --> G[OnDamaged]
+    F --> G
+    G --> H[Monster FSM Reaction]
+    H --> I{Dead?}
+    I -->|no| J[Chase / Attack / Return]
+    I -->|yes| K[EXP + Drop Roll + Respawn Timer]
+```
 
 ### 5) 파티/인스턴스 던전/거래/인벤토리·퀵슬롯
 
@@ -62,6 +138,29 @@
 * 거래는 `Invited -> Active -> Locked -> Committing` 상태 머신으로 관리하고, `Ready`와 `Confirm`을 분리해 수정 가능 구간과 확정 구간을 명확히 나눴습니다.
 * 인벤토리, 장비, 퀵슬롯 데이터는 로딩·저장·거래 검증과 연결되며, 장착 중 아이템 차단, 슬롯 재할당, 골드 검증까지 서버에서 다시 확인합니다.
 
+**시각 요약**
+
+```mermaid
+flowchart LR
+    subgraph PartyDungeon["Party / Dungeon"]
+        A[C_PARTY_INVITE_REQ] --> B[PartyActor]
+        B --> C[Party Snapshot / Broadcast]
+        C --> D[C_DUNGEON_ENTER_REQ]
+        D --> E[InstanceActor CreateOrGetForParty]
+        E --> F[MapChangeBegin to Party]
+    end
+
+    subgraph TradeFlow["Trade / Inventory"]
+        G[C_TRADE_REQ] --> H[Invited]
+        H --> I[Active]
+        I --> J[Ready x2]
+        J --> K[Locked]
+        K --> L[Confirm x2]
+        L --> M[Committing]
+        M --> N[DB Commit + Inventory Apply]
+    end
+```
+
 ### 6) 영속화/모니터링/부하 검증
 
 * 플레이 중 변경 사항은 Redis에 Dirty 기준으로 누적하고, `AutoCommit` 워커가 플레이어 코어, 인벤토리, 퀵슬롯 저장 요청을 분리 전송합니다.
@@ -69,29 +168,48 @@
 * `Prometheus` exporter와 `GameMetrics`, `DBAgentMetrics`를 연결해 packet, lobby wait, S2S RTT, queue wait, session I/O, DB pool 지표를 수집합니다.
 * `DummyClient`는 `idle`, `move`, `combat`, `mix` 시나리오와 CCU 램프업을 자동 실행해, 구조 변경 전후를 같은 기준으로 비교할 수 있게 했습니다.
 
+**시각 요약**
+
+```mermaid
+flowchart LR
+    subgraph Persistence["Persistence"]
+        A[Gameplay Change] --> B[Redis Hash Update]
+        B --> C[Dirty Set]
+        C --> D[AutoCommit Tick]
+        D --> E[S2S_REQ_SAVE_*]
+        E --> F[DBAgent Transaction]
+        F --> G[MSSQL Commit]
+    end
+
+    subgraph Observability["Observability / Load Test"]
+        H[DummyClient Scenario] --> I[Server Load Generation]
+        I --> J[GameServer / DBAgent Metrics]
+        J --> K[/metrics]
+        K --> L[Prometheus]
+        L --> M[Grafana]
+        I --> N[CSV Report]
+    end
+```
+
 ---
 
-## 🧭 제가 설계·개발한 영역
+## 🧩 핵심 설계 포인트
 
-* **멀티 서버 구조와 책임 분리**
-  * `LoginServer`, `GameServer`, `DBAgent`를 분리하고, C2S/S2S 프로토콜 흐름을 직접 구성했습니다.
-  * 인증, 플레이 판정, DB 트랜잭션의 책임을 나눠 장애 격리와 구조 설명 가능성을 높였습니다.
+* **입장 자체를 게이트로 다뤘습니다**
+  * 로그인 성공 뒤 바로 월드에 넣는 대신, 로비에서 `stat`, `items`, `quickslot` 로딩이 모두 끝난 경우에만 입장을 확정했습니다.
+  * 덕분에 비동기 DB 응답 순서가 흔들려도 반쯤 준비된 플레이어가 월드에 들어가는 문제를 막을 수 있었습니다.
 
-* **서버 권위 게임플레이 판정**
-  * 이동 검증, 전투 판정, 맵 전이, 거래 확정 등 상태 오염 위험이 큰 구간을 서버 기준으로 다시 설계했습니다.
-  * 클라이언트 입력을 신뢰하지 않고, 검증 통과 결과만 커밋·전파·저장하는 기준을 프로젝트 전반에 적용했습니다.
+* **상태 변경은 항상 직렬화된 경로로 모았습니다**
+  * 네트워크 스레드가 룸 상태를 직접 수정하지 않고, 세션과 룸 액터의 JobQueue를 통해 최종 반영이 일어나도록 구성했습니다.
+  * 이동, 전투, 거래, 맵 전이처럼 입력이 몰리는 구간도 "어느 순서로 커밋되는가"를 설명 가능한 구조로 유지했습니다.
 
-* **Actor/JobQueue 기반 동시성 제어**
-  * 세션과 룸, 파티, 인스턴스의 상태 변경을 전용 큐에서만 처리하도록 구조를 정리했습니다.
-  * 락을 더 복잡하게 늘리기보다, 상태 변경 경로를 직렬화하는 쪽으로 동시성 리스크를 낮췄습니다.
+* **정합성이 필요한 흐름은 별도 단계로 고정했습니다**
+  * 거래는 `Invited -> Active -> Locked -> Committing` 상태를 거치게 하고, 제안 변경 시 `Ready`와 `Confirm`을 리셋하도록 했습니다.
+  * 저장은 Redis Dirty 누적, AutoCommit, DBAgent 트랜잭션으로 나눠 부분 반영과 중복 커밋 가능성을 줄였습니다.
 
-* **정합성과 영속화 설계**
-  * Redis Write-Back, AutoCommit, DBAgent 트랜잭션, 종료 Flush를 묶어 실시간 처리와 영속화 경로를 분리했습니다.
-  * 거래, 인벤토리, 퀵슬롯, 아이템 UID 시드 같은 데이터 정합성 이슈를 구조 수준에서 관리했습니다.
-
-* **운영 검증 도구와 관측 체계**
-  * Prometheus/Grafana 기반 지표 수집과 대시보드 자산을 정리했고, DummyClient 부하 시나리오와 CSV 리포트 경로를 구축했습니다.
-  * 기능 구현을 넘어서 "왜 이 구조가 더 안정적인지"를 수치로 설명할 수 있도록 만들었습니다.
+* **기능 구현에서 끝나지 않고 운영 지표까지 연결했습니다**
+  * AOI, 큐 대기, 세션 송신량, DB 풀 대기 같은 지표를 Prometheus/Grafana로 모으고, DummyClient 시나리오로 구조의 효과를 반복 검증할 수 있게 했습니다.
+  * 그래서 이 프로젝트는 단순 기능 모음이 아니라, "왜 이 구조가 더 안정적인가"를 수치로 설명할 수 있는 형태로 정리되어 있습니다.
 
 ---
 
@@ -274,4 +392,3 @@ if (ts->confirmA && ts->confirmB)
 * 클라이언트 heartbeat timeout, RTT 수집, 연결 정책 고도화
 * 채팅 영속화 및 월드 드랍 아이템 시스템 보강
 * 핫룸 구간의 queue 지연 완화를 위한 추가 샤딩/세분화 검토
-
