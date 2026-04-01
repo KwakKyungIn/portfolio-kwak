@@ -142,23 +142,21 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    subgraph PartyDungeon["Party / Dungeon"]
-        A[C_PARTY_INVITE_REQ] --> B[PartyActor]
-        B --> C[Party Snapshot / Broadcast]
-        C --> D[C_DUNGEON_ENTER_REQ]
-        D --> E[InstanceActor CreateOrGetForParty]
-        E --> F[MapChangeBegin to Party]
-    end
+    A[C_PARTY_INVITE_REQ] --> B[PartyActor]
+    B --> C[Party Snapshot / Broadcast]
+    C --> D[C_DUNGEON_ENTER_REQ]
+    D --> E[InstanceActor CreateOrGetForParty]
+    E --> F[MapChangeBegin to Party]
+    F --> G[Instance Room Enter]
 
-    subgraph TradeFlow["Trade / Inventory"]
-        G[C_TRADE_REQ] --> H[Invited]
-        H --> I[Active]
-        I --> J[Ready x2]
-        J --> K[Locked]
-        K --> L[Confirm x2]
-        L --> M[Committing]
-        M --> N[DB Commit + Inventory Apply]
-    end
+    H[C_TRADE_REQ] --> I[Invited]
+    I --> J[Active]
+    J --> K[Ready x2]
+    K --> L[Locked]
+    L --> M[Confirm x2]
+    M --> N[Committing]
+    N --> O[DB Commit]
+    O --> P[Inventory / Gold Apply]
 ```
 
 ### 6) 영속화/모니터링/부하 검증
@@ -167,29 +165,6 @@ flowchart LR
 * 접속 종료 시 `RequestFlushNow` 경로를 통해 다음 주기를 기다리지 않고 즉시 저장을 요청해 종료 직전 변경분 손실을 줄였습니다.
 * `Prometheus` exporter와 `GameMetrics`, `DBAgentMetrics`를 연결해 packet, lobby wait, S2S RTT, queue wait, session I/O, DB pool 지표를 수집합니다.
 * `DummyClient`는 `idle`, `move`, `combat`, `mix` 시나리오와 CCU 램프업을 자동 실행해, 구조 변경 전후를 같은 기준으로 비교할 수 있게 했습니다.
-
-**시각 요약**
-
-```mermaid
-flowchart LR
-    subgraph Persistence["Persistence"]
-        A[Gameplay Change] --> B[Redis Hash Update]
-        B --> C[Dirty Set]
-        C --> D[AutoCommit Tick]
-        D --> E[S2S_REQ_SAVE_*]
-        E --> F[DBAgent Transaction]
-        F --> G[MSSQL Commit]
-    end
-
-    subgraph Observability["Observability / Load Test"]
-        H[DummyClient Scenario] --> I[Server Load Generation]
-        I --> J[GameServer / DBAgent Metrics]
-        J --> K[/metrics]
-        K --> L[Prometheus]
-        L --> M[Grafana]
-        I --> N[CSV Report]
-    end
-```
 
 ---
 
