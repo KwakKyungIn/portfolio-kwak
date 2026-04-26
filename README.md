@@ -9,7 +9,7 @@
 &emsp;&emsp;복잡한 기술보다 안정적인 구조와 원리를 이해하고자 하며,<br>
 &emsp;&emsp;꾸준한 학습과 실험으로 탄탄한 기반을 다지고 있습니다.<br>
 <br>
-&emsp;&emsp;🛠 주요 스택: C++ · C# · Win32 IOCP · Redis · MS SQL · Protocol Buffers · Unity · Prometheus/Grafana<br>
+&emsp;&emsp;🛠 주요 스택: C++ · C# · Win32 IOCP · Redis · MS SQL · Protocol Buffers · Unity<br>
 &emsp;&emsp;✨ “기본에 충실한 코드, 데이터로 증명하는 성능”을 지향합니다.
 <br clear="left"/>
 
