@@ -1,10 +1,13 @@
 # 🎮 MMO Project Silvane Vaults 개요
 
 📑 이 프로젝트의 상세 설명과 성능 그래프/표는 PDF 포트폴리오에서 확인할 수 있습니다.
-👉 [자세한 내용 보러가기 (PDF)](https://github.com/KwakKyungIn/portfolio-kwak/blob/main/assets/portfolio_mmoproject.pdf)
+👉 [자세한 내용 보러가기 (PDF)](https://github.com/KwakKyungIn/portfolio-kwak/blob/main/assets/MMOProject_SilvaneVaults.pdf)
 ## 📌 소개
 
-이 프로젝트는 개인 프로젝트로,  제가 개인적으로 설계하고 구현한 `LoginServer`, `GameServer`, `DBAgent`, `Unity Client` 분리 구조의 **C++ IOCP 기반 MMORPG 서버 프로젝트**입니다.
+이 프로젝트는 동아리 프로젝트로,  제가 설계하고 구현한 `LoginServer`, `GameServer`, `DBAgent`, `Unity Client` 분리 구조의 **C++ IOCP 기반 MMORPG 서버 프로젝트**입니다.
+
+팀장으로 프로젝트를 이끌고 서버 개발을 담당했으며, 제가 직접 설계하고 구현한 서버 영역을 중심으로 포트폴리오를 구성했습니다.
+
 단순히 기능을 붙이는 수준이 아니라, 로그인부터 월드 입장, 이동·전투, 파티·던전·거래, 저장과 종료까지 이어지는 핵심 플레이 흐름을 **서버 권위, 정합성, 관측 가능성** 관점에서 직접 설계하고 구현했습니다.
 
 이번 작업에서 특히 중요하게 가져간 기준은 "기능이 동작하는가"보다 **동시 입력, 비동기 DB 응답, 저장 지연, 예외 상황에서도 상태가 일관되게 수렴하는가**였습니다. 그래서 프로젝트 전반을 다음 네 가지 축으로 정리했습니다.
