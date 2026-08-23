@@ -3,8 +3,8 @@
 📑 이 프로젝트의 상세 설명과 성능 그래프/표는 PDF 포트폴리오에서 확인할 수 있습니다.  
 👉 [자세한 내용 보러가기 (PDF)](./assets/IocpChatServer_Portfolio.pdf)
 
+👉 [코드 샘플 확인하기](./CodeSample)
 ---
-
 ## 📌 개요
 Windows IOCP 기반의 초저지연 채팅 서버입니다.  
 세션 I/O 파이프라인, 송신 **Scatter–Gather WSASend** 배치, **커스텀 메모리/오브젝트 풀**을 직접 설계·구현하여 성능을 극대화했습니다.  
