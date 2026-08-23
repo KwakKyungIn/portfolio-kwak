@@ -2,6 +2,11 @@
 
 📑 이 프로젝트의 상세 설명과 성능 그래프/표는 PDF 포트폴리오에서 확인할 수 있습니다.
 👉 [자세한 내용 보러가기 (PDF)](https://github.com/KwakKyungIn/portfolio-kwak/blob/main/assets/MMOProject_SilvaneVaults.pdf)
+
+
+👉 [코드 샘플 확인하기](./CodeSample)
+
+
 ## 📌 소개
 
 이 프로젝트는 동아리 프로젝트로,  제가 설계하고 구현한 `LoginServer`, `GameServer`, `DBAgent`, `Unity Client` 분리 구조의 **C++ IOCP 기반 MMORPG 서버 프로젝트**입니다.
